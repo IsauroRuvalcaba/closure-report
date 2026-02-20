@@ -10,4 +10,8 @@ export default class EntryList {
   grandTotal() {
     return this.entries.reduce((acc, currentValue) => acc + currentValue, 0);
   }
+
+  getList() {
+    return this.entries;
+  }
 }
