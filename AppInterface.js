@@ -38,6 +38,25 @@ export default class AppInterface {
       this.render();
     });
 
+    this.root.addEventListener("click", (e) => {
+      if (e.target.classList.contains("oRing-del-btn")) {
+        e.stopPropagation();
+        const id = e.target.closest("li").dataset.id;
+
+        this.report.overRings.remove(id);
+        e.target.closest("li").remove();
+        this.render();
+      }
+      if (e.target.classList.contains("exp-del-btn")) {
+        e.stopPropagation();
+        const id = e.target.closest("li").dataset.id;
+
+        this.report.expenses.remove(id);
+        e.target.closest("li").remove();
+        this.render();
+      }
+    });
+
     this.btnAddOverring.addEventListener("click", (e) => {
       // let overRing = prompt("Add overring amount");
       let overRing = this.inputORing.value;
@@ -75,16 +94,25 @@ export default class AppInterface {
     this.totalDrawer.innerText = this.report.getActualTotal().toFixed(2);
     this.discrepancy.innerText = this.report.getDiscrepancy().toFixed(2);
 
-    this.renderList(this.overRingsList, this.report.overRings.getList());
-    this.renderList(this.expenseList, this.report.expenses.getList());
+    this.renderList(
+      "oRing",
+      this.overRingsList,
+      this.report.overRings.getList(),
+    );
+    this.renderList("exp", this.expenseList, this.report.expenses.getList());
   }
 
-  renderList(entryEl, entryList) {
+  renderList(listType, entryEl, entryList) {
     entryEl.replaceChildren();
     if (entryList.length > 0) {
       entryList.forEach((entry, index) => {
         const li = document.createElement("li");
-        li.innerText = entry.toFixed(2);
+        li.dataset.id = entry.id;
+        li.innerText = entry.amount.toFixed(2);
+        const btn = document.createElement("button");
+        btn.classList.add(`${listType}-del-btn`);
+        btn.innerText = "x";
+        li.appendChild(btn);
         entryEl.appendChild(li);
       });
     }
