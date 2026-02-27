@@ -7,6 +7,14 @@ export default class NumberPad {
     this.keyPadElement = keyPadElement;
   }
 
+  // The switchboard
+  setTarget(initialValue, updateCallback) {
+    // This method will adjust the current input based on where focus is replacing the below dependency injection callback in AppInterface.
+    // (val) => { this.report.grossSales = val; this.render(); }
+    this.displayValue = initialValue === "0" ? "" : initialValue.toString();
+    this.onUpdate = updateCallback;
+  }
+
   handleTap(digit) {
     if (this.displayValue.includes(".") && digit === ".") return;
 
@@ -35,7 +43,7 @@ export default class NumberPad {
     const funcKeys = document.createElement("div");
     const numpad = document.createElement("div");
 
-    for (let i = 0; i <= 9; i++) {
+    for (let i = 9; i >= 0; i--) {
       const button = document.createElement("button");
       button.textContent = i;
       button.classList.add("num");
@@ -60,8 +68,8 @@ export default class NumberPad {
     funcKeys.appendChild(clearButton);
     this.setupEventListeners();
 
-    keypad.appendChild(numpad);
     keypad.appendChild(funcKeys);
+    keypad.appendChild(numpad);
 
     this.keyPadElement.appendChild(this.parentContainer);
   }

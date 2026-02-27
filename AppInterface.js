@@ -1,8 +1,14 @@
 import ClosureReport from "./ClosureReport.js";
+import NumberPad from "./NumberPad.js";
 export default class AppInterface {
   constructor(rootElement) {
     this.root = rootElement;
     this.report = new ClosureReport(0, 0, 0);
+
+    this.keypad = document.querySelector(".keypad-container");
+    this.numpad = new NumberPad(this.keypad, () => {});
+    this.numpad.render();
+
     this.grossSales = this.root.querySelector("#sales");
     this.overRingsList = this.root.querySelector("#overring-list");
     this.inputORing = this.root.querySelector("#over-ring");
@@ -25,17 +31,57 @@ export default class AppInterface {
 
       this.render();
     });
+    this.grossSales.addEventListener("focus", () => {
+      this.numpad.setTarget(this.grossSales.value, (newVal) => {
+        this.grossSales.value = newVal;
+
+        // Manually trigger the 'input' event so the logic above runs
+        this.grossSales.dispatchEvent(new Event("input"));
+      });
+    });
 
     this.totalCash.addEventListener("input", (e) => {
       this.report.actualCash = parseFloat(e.target.value);
 
       this.render();
     });
+    this.totalCash.addEventListener("focus", () => {
+      this.numpad.setTarget(this.totalCash.value, (newVal) => {
+        this.totalCash.value = newVal;
+
+        // these are needed when an actual program is inputing the value
+        this.totalCash.dispatchEvent(new Event("input"));
+      });
+    });
 
     this.creditCards.addEventListener("input", (e) => {
       this.report.creditCardTotal = parseFloat(e.target.value);
 
       this.render();
+    });
+    this.creditCards.addEventListener("focus", () => {
+      this.numpad.setTarget(this.creditCards.value, (newVal) => {
+        this.creditCards.value = newVal;
+
+        this.creditCards.dispatchEvent(new Event("input"));
+      });
+    });
+
+    // For the Over-ring input
+    this.inputORing.addEventListener("focus", () => {
+      this.numpad.setTarget(this.inputORing.value, (newVal) => {
+        this.inputORing.value = newVal;
+        // We still dispatch the event just in case you add validation later!
+        this.inputORing.dispatchEvent(new Event("input"));
+      });
+    });
+
+    // For the Expense input
+    this.inputExpense.addEventListener("focus", () => {
+      this.numpad.setTarget(this.inputExpense.value, (newVal) => {
+        this.inputExpense.value = newVal;
+        this.inputExpense.dispatchEvent(new Event("input"));
+      });
     });
 
     this.root.addEventListener("click", (e) => {
