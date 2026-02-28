@@ -32,6 +32,7 @@ export default class AppInterface {
       this.render();
     });
     this.grossSales.addEventListener("focus", () => {
+      this.numpad.show();
       this.numpad.setTarget(this.grossSales.value, (newVal) => {
         this.grossSales.value = newVal;
 
@@ -46,6 +47,7 @@ export default class AppInterface {
       this.render();
     });
     this.totalCash.addEventListener("focus", () => {
+      this.numpad.show();
       this.numpad.setTarget(this.totalCash.value, (newVal) => {
         this.totalCash.value = newVal;
 
@@ -60,6 +62,7 @@ export default class AppInterface {
       this.render();
     });
     this.creditCards.addEventListener("focus", () => {
+      this.numpad.show();
       this.numpad.setTarget(this.creditCards.value, (newVal) => {
         this.creditCards.value = newVal;
 
@@ -69,6 +72,7 @@ export default class AppInterface {
 
     // For the Over-ring input
     this.inputORing.addEventListener("focus", () => {
+      this.numpad.show();
       this.numpad.setTarget(this.inputORing.value, (newVal) => {
         this.inputORing.value = newVal;
         // We still dispatch the event just in case you add validation later!
@@ -78,6 +82,7 @@ export default class AppInterface {
 
     // For the Expense input
     this.inputExpense.addEventListener("focus", () => {
+      this.numpad.show();
       this.numpad.setTarget(this.inputExpense.value, (newVal) => {
         this.inputExpense.value = newVal;
         this.inputExpense.dispatchEvent(new Event("input"));
@@ -127,6 +132,18 @@ export default class AppInterface {
       } else {
         alert("Please enter a number greater than zero");
         this.inputExpense.value = "";
+      }
+    });
+
+    // Hide numpad
+    document.addEventListener("click", (e) => {
+      const isInput = e.target.tagName === "INPUT";
+      const isKeypad = this.keypad.contains(e.target);
+
+      // If the user clicked something that ISN'T an input
+      // and ISN'T the keypad itself... hide it!
+      if (!isInput && !isKeypad) {
+        this.numpad.hide();
       }
     });
   }
