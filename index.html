@@ -6,45 +6,64 @@
     <title>Closure Report</title>
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="./app.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
   </head>
   <body>
     <div class="form-container">
-      <div>
+      <div class="input-group">
+        <input type="text" id="sales" placeholder="" autocomplete="off" />
         <label for="sales">Sales</label>
-        <input type="text" id="sales" />
       </div>
       <ul id="overring-list"></ul>
-      <div>
-        <input type="text" id="over-ring" />
-        <button id="add-overring">Add Over-Ring</button>
+      <div class="exp-group">
+        <input type="text" id="over-ring" placeholder="" autocomplete="off" />
+        <label for="over-ring">Over Rings</label>
+        <button class="exp-button" id="add-overring">+</button>
       </div>
-      <div>
+      <div class="results">
         <div>Net Sales</div>
         <div id="net-sales">$0.00</div>
       </div>
       <ul id="expense-list"></ul>
-      <div>
-        <input type="text" id="expense" />
-        <button id="add-expense">Add Expense Receipt</button>
+      <div class="exp-group">
+        <input type="text" id="expense" placeholder="" autocomplete="off" />
+        <label for="over-ring">Recipt Cost</label>
+        <button class="exp-button" id="add-expense">+</button>
       </div>
-      <div>
+      <div class="results">
         <div>Net Cash</div>
         <div id="net-cash">$0.00</div>
       </div>
-      <div>
+      <div class="input-group">
+        <input
+          type="text"
+          id="credit-cards"
+          placeholder=""
+          autocomplete="off"
+        />
         <label for="credit-cards">Credit Card Amount</label>
-        <input type="text" id="credit-cards" />
       </div>
-      <div>
+      <div class="input-group">
+        <input type="text" id="total-cash" placeholder="" autocomplete="off" />
         <label for="total-cash">Total Cash</label>
-        <input type="text" id="total-cash" />
       </div>
 
-      <div>
+      <div class="results">
         <div>Total Drawer</div>
         <div id="total-drawer">$0.00</div>
       </div>
-      <div>
+      <div class="results">
         <div>Discrepancy</div>
         <div id="discrepancy">$0.00</div>
       </div>

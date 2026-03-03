@@ -1,3 +1,155 @@
+:root {
+  --primary-blue: #2563eb; /* The vibrant blue from the image */
+  --primary-green: #10b981;
+  --primary-bckgr-green: #ecfdf5;
+  --primary-bckgr-blue: #e8effa;
+  --gray-border: #d1d5db;
+  --label-color: #6b7280;
+  --button-blue: #cbddfa;
+}
+
+body {
+  font-family: "Monserrat", sans-serif;
+}
+
 .hidden {
   display: none;
+}
+
+.input-group {
+  position: relative;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.exp-group {
+  position: relative;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.exp-group input {
+  width: 75%;
+  padding: 16px 12px 8px;
+  border: 1px solid var(--gray-border);
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.2s ease;
+  background: var(--primary-bckgr-blue);
+  color: black;
+}
+.exp-group label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  color: var(--label-color);
+  font-size: 14px;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  background: var(--primary-bckgr-blue);
+  padding: 0 4px;
+}
+.exp-button {
+  position: absolute;
+  font-size: 32px;
+  right: 55px;
+  height: 90%;
+  width: 15%;
+  border-radius: 12px;
+  border: none;
+  background-color: var(--button-blue);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 16px 12px 8px;
+  border: 1px solid var(--gray-border);
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.2s ease;
+  background: var(--primary-bckgr-green);
+  color: black;
+}
+
+.input-group label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  color: var(--label-color);
+  font-size: 14px;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  background: var(--primary-bckgr-green);
+  padding: 0 4px;
+}
+
+/* Floating Animation: Trigger on Focus or when not empty */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  top: -8px; /* Moves the label above the top border*/
+  left: 10px;
+  font-size: 12px;
+  color: var(--primary-green);
+  font-weight: 600;
+}
+
+.input-group input:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.exp-group input:focus + label,
+.exp-group input:not(:placeholder-shown) + label {
+  top: -8px; /* Moves the label above the top border*/
+  left: 10px;
+  font-size: 12px;
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
+.exp-group input:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+ul {
+  width: 100%;
+  max-width: 320px;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  text-align: right;
+}
+
+.exp-btn {
+  height: 100%;
+  margin-left: 20px;
+  background: transparent;
+  border: 2px solid var(--primary-bckgr-blue);
+  border-radius: 12px;
+}
+
+i.bi {
+  pointer-events: none; /* this make the button event listner work*/
+  color: rgb(255, 102, 102);
+  font-size: 16px;
+}
+
+.results {
+  width: 100%;
+  display: flex; /* Makes the direct children flex items arranged in a row */
+  justify-content: space-between; /* Optional: Distributes space evenly between the items (pushing one to the far right) */
+  align-items: center; /* Optional: Aligns items vertically in the center */
+  max-width: 320px;
 }

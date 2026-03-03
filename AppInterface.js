@@ -173,8 +173,8 @@ export default class AppInterface {
         li.dataset.id = entry.id;
         li.innerText = entry.amount.toFixed(2);
         const btn = document.createElement("button");
-        btn.classList.add(`${listType}-del-btn`);
-        btn.innerText = "x";
+        btn.classList.add(`${listType}-del-btn`, "exp-btn");
+        btn.innerHTML = '<i class="bi bi-trash3"></i>';
         li.appendChild(btn);
         entryEl.appendChild(li);
       });
