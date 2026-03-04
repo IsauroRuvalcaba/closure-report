@@ -41,7 +41,9 @@ export default class NumberPad {
     this.parentContainer = keypad;
 
     const funcKeys = document.createElement("div");
+    funcKeys.classList.add("funcKeys");
     const numpad = document.createElement("div");
+    numpad.classList.add("numpad");
 
     for (let i = 9; i >= 0; i--) {
       const button = document.createElement("button");

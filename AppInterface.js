@@ -27,12 +27,13 @@ export default class AppInterface {
 
   setupEventListeners() {
     this.grossSales.addEventListener("input", (e) => {
-      this.report.grossSales = parseFloat(e.target.value);
+      this.report.grossSales = parseFloat(e.target.value) || 0;
 
       this.render();
     });
     this.grossSales.addEventListener("focus", () => {
       this.numpad.show();
+
       this.numpad.setTarget(this.grossSales.value, (newVal) => {
         this.grossSales.value = newVal;
 
@@ -42,7 +43,7 @@ export default class AppInterface {
     });
 
     this.totalCash.addEventListener("input", (e) => {
-      this.report.actualCash = parseFloat(e.target.value);
+      this.report.actualCash = parseFloat(e.target.value) || 0;
 
       this.render();
     });
@@ -57,7 +58,7 @@ export default class AppInterface {
     });
 
     this.creditCards.addEventListener("input", (e) => {
-      this.report.creditCardTotal = parseFloat(e.target.value);
+      this.report.creditCardTotal = parseFloat(e.target.value) || 0;
 
       this.render();
     });

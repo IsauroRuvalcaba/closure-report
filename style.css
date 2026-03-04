@@ -12,8 +12,19 @@ body {
   font-family: "Monserrat", sans-serif;
 }
 
+h3 {
+  text-align: center;
+  margin: 15px 0 5px 0;
+  color: var(--primary-green);
+  font-weight: 100;
+}
+
 .hidden {
-  display: none;
+  /* display: none; */
+  visibility: hidden;
+  /* transform: scaleY(0); */
+  transform: translate(calc(-100% - 150px));
+  /* opacity: 0; */
 }
 
 .input-group {
@@ -152,4 +163,67 @@ i.bi {
   justify-content: space-between; /* Optional: Distributes space evenly between the items (pushing one to the far right) */
   align-items: center; /* Optional: Aligns items vertically in the center */
   max-width: 320px;
+}
+
+.keypad-container {
+  /* width: 100%; */
+  max-width: 150px;
+  margin: 0 auto;
+}
+
+.keypad {
+  background: #ffffff;
+  margin: auto;
+  position: relative;
+  /* height: 180px; */
+  width: 150px;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  overflow: hidden;
+  border-radius: 5px;
+  transition: all 0.25s ease;
+  /* transition-behavior: allow-discrete; */
+  box-shadow: 0 0 40px 0px rgba(0, 0, 0, 0.3);
+}
+
+.funcKeys {
+  display: flex;
+  width: 100%;
+}
+.funcKeys > button {
+  flex: 1;
+  aspect-ratio: 1.75;
+  border-radius: 5px;
+  font-size: 1.25rem;
+  border-color: var(--gray-border);
+}
+
+.numpad {
+  display: grid;
+  grid-gap: 0px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.num {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  border-color: rgba(from var(--primary-green) r g b / 0.1);
+
+  /* The inner shadow effect */
+  box-shadow:
+    inset 5px 5px 25px 1px rgba(from var(--primary-green) r g b / 0.1),
+    inset -5px -5px 25px 1px rgba(from var(--primary-green) r g b / 0.1); /*Adjust values as needed*/
+}
+.num:active {
+  box-shadow:
+    inset 5px 5px 5px 15px rgba(from var(--primary-blue) r g b / 0.1),
+    inset -5px -5px 5px 15px rgba(from var(--primary-blue) r g b / 0.1);
+}
+.num:nth-child(10) {
+  grid-column: 2;
+}
+.num:nth-child(11) {
+  grid-column: 3;
 }
