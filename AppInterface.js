@@ -1,5 +1,10 @@
 import ClosureReport from "./ClosureReport.js";
 import NumberPad from "./NumberPad.js";
+
+const currencyFormatter = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 export default class AppInterface {
   constructor(rootElement) {
     this.root = rootElement;
@@ -32,14 +37,17 @@ export default class AppInterface {
       this.render();
     });
     this.grossSales.addEventListener("focus", () => {
-      this.numpad.show();
+      // ensure keypad only shows up in desktop view - also in css
+      if (window.innerWidth <= 768) {
+        this.numpad.show();
 
-      this.numpad.setTarget(this.grossSales.value, (newVal) => {
-        this.grossSales.value = newVal;
+        this.numpad.setTarget(this.grossSales.value, (newVal) => {
+          this.grossSales.value = newVal;
 
-        // Manually trigger the 'input' event so the logic above runs
-        this.grossSales.dispatchEvent(new Event("input"));
-      });
+          // Manually trigger the 'input' event so the logic above runs
+          this.grossSales.dispatchEvent(new Event("input"));
+        });
+      }
     });
 
     this.totalCash.addEventListener("input", (e) => {
@@ -48,13 +56,16 @@ export default class AppInterface {
       this.render();
     });
     this.totalCash.addEventListener("focus", () => {
-      this.numpad.show();
-      this.numpad.setTarget(this.totalCash.value, (newVal) => {
-        this.totalCash.value = newVal;
+      // ensure keypad only shows up in desktop view - also in css
+      if (window.innerWidth <= 768) {
+        this.numpad.show();
+        this.numpad.setTarget(this.totalCash.value, (newVal) => {
+          this.totalCash.value = newVal;
 
-        // these are needed when an actual program is inputing the value
-        this.totalCash.dispatchEvent(new Event("input"));
-      });
+          // these are needed when an actual program is inputing the value
+          this.totalCash.dispatchEvent(new Event("input"));
+        });
+      }
     });
 
     this.creditCards.addEventListener("input", (e) => {
@@ -63,31 +74,40 @@ export default class AppInterface {
       this.render();
     });
     this.creditCards.addEventListener("focus", () => {
-      this.numpad.show();
-      this.numpad.setTarget(this.creditCards.value, (newVal) => {
-        this.creditCards.value = newVal;
+      // ensure keypad only shows up in desktop view - also in css
+      if (window.innerWidth <= 768) {
+        this.numpad.show();
+        this.numpad.setTarget(this.creditCards.value, (newVal) => {
+          this.creditCards.value = newVal;
 
-        this.creditCards.dispatchEvent(new Event("input"));
-      });
+          this.creditCards.dispatchEvent(new Event("input"));
+        });
+      }
     });
 
     // For the Over-ring input
     this.inputORing.addEventListener("focus", () => {
-      this.numpad.show();
-      this.numpad.setTarget(this.inputORing.value, (newVal) => {
-        this.inputORing.value = newVal;
-        // We still dispatch the event just in case you add validation later!
-        this.inputORing.dispatchEvent(new Event("input"));
-      });
+      // ensure keypad only shows up in desktop view - also in css
+      if (window.innerWidth <= 768) {
+        this.numpad.show();
+        this.numpad.setTarget(this.inputORing.value, (newVal) => {
+          this.inputORing.value = newVal;
+          // We still dispatch the event just in case you add validation later!
+          this.inputORing.dispatchEvent(new Event("input"));
+        });
+      }
     });
 
     // For the Expense input
     this.inputExpense.addEventListener("focus", () => {
-      this.numpad.show();
-      this.numpad.setTarget(this.inputExpense.value, (newVal) => {
-        this.inputExpense.value = newVal;
-        this.inputExpense.dispatchEvent(new Event("input"));
-      });
+      // ensure keypad only shows up in desktop view - also in css
+      if (window.innerWidth <= 768) {
+        this.numpad.show();
+        this.numpad.setTarget(this.inputExpense.value, (newVal) => {
+          this.inputExpense.value = newVal;
+          this.inputExpense.dispatchEvent(new Event("input"));
+        });
+      }
     });
 
     this.root.addEventListener("click", (e) => {
@@ -153,10 +173,18 @@ export default class AppInterface {
     this.overRingsList.replaceChildren();
     this.expenseList.replaceChildren();
 
-    this.netSales.innerText = this.report.getNetSales().toFixed(2);
-    this.netCash.innerText = this.report.getExpectedTotal().toFixed(2);
-    this.totalDrawer.innerText = this.report.getActualTotal().toFixed(2);
-    this.discrepancy.innerText = this.report.getDiscrepancy().toFixed(2);
+    this.netSales.innerText = currencyFormatter.format(
+      this.report.getNetSales(),
+    );
+    this.netCash.innerText = currencyFormatter.format(
+      this.report.getExpectedTotal(),
+    );
+    this.totalDrawer.innerText = currencyFormatter.format(
+      this.report.getActualTotal(),
+    );
+    this.discrepancy.innerText = currencyFormatter.format(
+      this.report.getDiscrepancy(),
+    );
 
     this.renderList(
       "oRing",
@@ -172,11 +200,18 @@ export default class AppInterface {
       entryList.forEach((entry, index) => {
         const li = document.createElement("li");
         li.dataset.id = entry.id;
-        li.innerText = entry.amount.toFixed(2);
+
         const btn = document.createElement("button");
         btn.classList.add(`${listType}-del-btn`, "exp-btn");
         btn.innerHTML = '<i class="bi bi-trash3"></i>';
         li.appendChild(btn);
+
+        const liText = document.createElement("span");
+        liText.style.display = "inline-block";
+        liText.style.minWidth = "8ch";
+        liText.innerText = currencyFormatter.format(entry.amount);
+        li.appendChild(liText);
+
         entryEl.appendChild(li);
       });
     }
