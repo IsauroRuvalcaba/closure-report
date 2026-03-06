@@ -203,7 +203,8 @@ i.bi {
 }
 
 .keypad-container {
-  max-width: 150px;
+  /* max-width: 150px; */
+  width: 100%;
   margin: 0 auto;
   display: none;
 }
@@ -212,8 +213,8 @@ i.bi {
     display: block;
   }
   .input-group {
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     padding: 4px 4px 4px;
     height: 20px;
   }
@@ -268,13 +269,19 @@ i.bi {
     width: 26px;
     border-radius: 4px;
   }
+  i.bi {
+    font-size: 10px;
+  }
+  .difference {
+    margin-top: 10px;
+  }
 }
 
 .keypad {
   background: #ffffff;
   margin: auto;
   position: relative;
-  width: 150px;
+  width: 300px;
   margin-top: 2em;
   margin-bottom: 2em;
   overflow: hidden;
@@ -289,7 +296,7 @@ i.bi {
 }
 .funcKeys > button {
   flex: 1;
-  aspect-ratio: 1.75;
+  aspect-ratio: 4;
   border-radius: 5px;
   font-size: 1.25rem;
   border-color: var(--gray-border);
@@ -303,7 +310,7 @@ i.bi {
 
 .num {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 3;
   border-radius: 12px;
   font-size: 1.25rem;
   border-color: rgba(from var(--primary-green) r g b / 0.1);
@@ -323,6 +330,9 @@ i.bi {
 }
 .num:nth-child(11) {
   grid-column: 3;
+}
+.period {
+  font-weight: 900;
 }
 
 input,

@@ -45,17 +45,33 @@ export default class NumberPad {
     const numpad = document.createElement("div");
     numpad.classList.add("numpad");
 
+    // for (let i = 1; i <= 9; i++) {
+    //   const button = document.createElement("button");
+    //   button.textContent = i;
+    //   button.classList.add("num");
+    //   numpad.appendChild(button);
+    // }
     for (let i = 9; i >= 0; i--) {
+      let num;
+
+      if (i === 0) {
+        num = 0;
+      } else {
+        const r = Math.floor((9 - i) / 3); // row index 0–2
+        const c = (9 - i) % 3; // column index 0–2
+        num = 7 - 3 * r + c;
+      }
       const button = document.createElement("button");
-      button.textContent = i;
+      button.textContent = num;
       button.classList.add("num");
-      // button.dataset.key = i;
       numpad.appendChild(button);
+
+      // console.log(num);
     }
 
     let pButton = document.createElement("button");
     pButton.textContent = ".";
-    pButton.classList.add("num");
+    pButton.classList.add("num", "period");
     // pButton.dataset.key = "p";
     numpad.appendChild(pButton);
 
