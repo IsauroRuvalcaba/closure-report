@@ -6,6 +6,7 @@
   --gray-border: #d1d5db;
   --label-color: #6b7280;
   --button-blue: #cbddfa;
+  --darkMode-bckgr-navy: #0f172a;
 }
 
 body {
@@ -15,6 +16,7 @@ body {
   align-items: center;
   flex-direction: column;
   text-align: center;
+  background-color: #f1f5f9;
 }
 
 h3 {
@@ -27,7 +29,7 @@ h3 {
 .form-container {
   width: 100%;
   max-width: 360px;
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .hidden {
@@ -213,7 +215,7 @@ i.bi {
     display: block;
   }
   .input-group {
-    margin-top: 15px;
+    margin-top: 18px;
     margin-bottom: 15px;
     padding: 4px 4px 4px;
     height: 20px;
@@ -235,6 +237,16 @@ i.bi {
     pointer-events: none;
     background: var(--primary-bckgr-green);
     padding: 0 4px;
+  }
+
+  /* Floating Animation: Trigger on Focus or when not empty */
+  .input-group input:focus + label,
+  .input-group input:not(:placeholder-shown) + label {
+    top: -6px; /* Moves the label above the top border*/
+    left: 18px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 20px;
   }
 
   .exp-group {
@@ -270,7 +282,7 @@ i.bi {
     border-radius: 4px;
   }
   i.bi {
-    font-size: 10px;
+    font-size: 16px;
   }
   .difference {
     margin-top: 10px;
