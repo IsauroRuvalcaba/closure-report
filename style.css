@@ -4,7 +4,8 @@
   --primary-bckgr-green: #ecfdf5;
   --primary-bckgr-blue: #e8effa;
   --gray-border: #d1d5db;
-  --label-color: #6b7280;
+  --label-color: #1a1b1f;
+  /* --label-color: #6b7280; */
   --button-blue: #cbddfa;
   --darkMode-bckgr-navy: #0f172a;
 }
@@ -32,10 +33,10 @@ h3 {
   font-size: 16px;
 }
 
-.hidden {
+/* .hidden {
   visibility: hidden;
   transform: translate(calc(-100% - 290px));
-}
+} */
 
 .input-group {
   position: relative;
@@ -205,15 +206,93 @@ i.bi {
 }
 
 .keypad-container {
-  /* max-width: 150px; */
+  /* width: 100%;
+  margin: 0 auto;*/
+  display: none;
   width: 100%;
   margin: 0 auto;
-  display: none;
 }
 @media (max-width: 768px) {
+  /* 1. Freeze the background so only the form moves */
+  html,
+  body {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden; /* This kills the horizontal scroll globally */
+    margin: 0;
+    padding: 0;
+    display: block;
+    background-color: #f1f5f9; /* Your background color */
+  }
+
+  .form-container {
+    width: 100%;
+    /* Start at full height */
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 20px 40px 20px;
+    /* Smoothly adjust height when keypad pops up */
+    /* transition: height 0.3s ease; */
+
+    transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* When keypad is active, shrink the form to make room */
+  body.keypad-open .form-container {
+    height: calc(100vh - 246.5px);
+    padding-bottom: 80px;
+  }
+
+  /* Ensure your results bars still span the width */
+  .results {
+    width: 100%;
+    max-width: 320px;
+  }
+
   .keypad-container {
     display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 246.5px;
+    z-index: 9999;
+    background: white;
+
+    /* THE GHOST LOGIC: Keypad is invisible and unclickable by default */
+    visibility: hidden;
+    pointer-events: none;
+
+    /* transition:
+      transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      visibility 0.3s;
+    transform: translateY(100%); */
+
+    /* THE EXIT ANIMATION: 
+       This cubic-bezier creates a "pull back" or "slight raise" 
+       before it drops down. */
+    transition:
+      transform 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045),
+      visibility 0.4s;
+    transform: translateY(100%);
   }
+
+  .keypad-container.active {
+    /* THE GHOST LOGIC: Keypad becomes a real, clickable object */
+    visibility: visible;
+    pointer-events: auto;
+
+    /* THE ENTRANCE ANIMATION:
+       This is your original "Bounce" timing. */
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: translateY(0);
+  }
+
   .input-group {
     margin-top: 18px;
     margin-bottom: 15px;

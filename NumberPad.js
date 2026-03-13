@@ -36,7 +36,8 @@ export default class NumberPad {
 
   render() {
     const keypad = document.createElement("div");
-    keypad.classList.add("keypad", "hidden");
+
+    keypad.classList.add("keypad");
 
     this.parentContainer = keypad;
 
@@ -65,8 +66,6 @@ export default class NumberPad {
       button.textContent = num;
       button.classList.add("num");
       numpad.appendChild(button);
-
-      // console.log(num);
     }
 
     let pButton = document.createElement("button");
@@ -93,10 +92,15 @@ export default class NumberPad {
   }
 
   show() {
-    this.parentContainer.classList.remove("hidden");
+    this.keyPadElement.classList.add("active");
+
+    document.body.classList.add("keypad-open"); // This shrinks the form
   }
   hide() {
-    this.parentContainer.classList.add("hidden");
+    // this.parentContainer.classList.add("hidden");
+    this.keyPadElement.classList.remove("active");
+
+    document.body.classList.remove("keypad-open"); // This expands the form
   }
 
   setupEventListeners() {
