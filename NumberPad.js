@@ -14,12 +14,19 @@ export default class NumberPad {
     // This method will adjust the current input based on where focus is replacing the below dependency injection callback in AppInterface.
     // (val) => { this.report.grossSales = val; this.render(); }
     this.displayValue = initialValue === "0" ? "" : initialValue.toString();
+
+    // Sync rawInput with the incoming value by removeing decimal
+    // if empty/0 then reset to empty string
+    this.rawInput =
+      initialValue === "0" || !initialValue
+        ? ""
+        : initialValue.toString().replace(".", "");
+
     this.onUpdate = updateCallback;
   }
 
   handleTap(digit) {
     if (this.isAddMode) {
-      // Only allow numbers 0-9
       if (/[0-9]/.test(digit)) {
         this.rawInput += digit;
 
