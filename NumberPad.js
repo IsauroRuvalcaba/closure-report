@@ -5,6 +5,8 @@ export default class NumberPad {
     this.displayValue = "";
     this.onUpdate = onUpdate;
     this.keyPadElement = keyPadElement;
+    this.rawInput = ""; // New: strictly for Add Mode digits
+    this.isAddMode = true; // Toggle
   }
 
   // The switchboard
@@ -16,16 +18,34 @@ export default class NumberPad {
   }
 
   handleTap(digit) {
-    if (this.displayValue.includes(".") && digit === ".") return;
+    if (this.isAddMode) {
+      // Only allow numbers 0-9
+      if (/[0-9]/.test(digit)) {
+        this.rawInput += digit;
 
-    const isValidChar = (digit) => /[0-9.]/.test(digit);
-    if (isValidChar(digit)) {
-      this.displayValue += digit;
+        this.displayValue = (Number(this.rawInput) / 100).toFixed(2);
+      }
+    } else {
+      if (this.displayValue.includes(".") && digit === ".") return;
+
+      if (/[0-9.]/.test(digit)) {
+        this.displayValue += digit;
+      }
     }
   }
 
   backspace() {
-    if (this.displayValue.length > 0) {
+    if (this.isAddMode) {
+      this.rawInput = this.rawInput.slice(0, -1);
+
+      // Recalculate the display. If empty, show 0.00
+      if (this.rawInput.length === 0) {
+        this.displayValue = "0.00";
+      } else {
+        this.displayValue = (Number(this.rawInput) / 100).toFixed(2);
+      }
+    } else {
+      // Standard backspace
       this.displayValue = this.displayValue.slice(0, -1);
     }
   }
