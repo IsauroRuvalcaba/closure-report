@@ -416,14 +416,29 @@ i.bi {
     inset 5px 5px 5px 15px rgba(from var(--primary-blue) r g b / 0.1),
     inset -5px -5px 5px 15px rgba(from var(--primary-blue) r g b / 0.1);
 }
-.num:nth-child(10) {
+/* .num:nth-child(10) {
   grid-column: 2;
 }
 .num:nth-child(11) {
   grid-column: 3;
-}
+} */
 .period {
   font-weight: 900;
+}
+
+.mode-toggle {
+  font-size: 0.8rem;
+  font-weight: bold;
+  background-color: #e2e8f0; /* Default light gray */
+  transition: all 0.2s ease;
+}
+
+/* Style for when Add Mode is active */
+.mode-toggle.active-mode {
+  background-color: var(--button-blue); /* Blue background */
+
+  /* border-color: #2563eb; */
+  border: none;
 }
 
 input,

@@ -7,6 +7,7 @@ export default class NumberPad {
     this.keyPadElement = keyPadElement;
     this.rawInput = ""; // New: strictly for Add Mode digits
     this.isAddMode = true; // Toggle
+    this.modeBtn = "";
   }
 
   // The switchboard
@@ -59,6 +60,7 @@ export default class NumberPad {
 
   clear() {
     this.displayValue = "";
+    this.rawInput = "";
   }
 
   render() {
@@ -101,6 +103,12 @@ export default class NumberPad {
     // pButton.dataset.key = "p";
     numpad.appendChild(pButton);
 
+    let addModeButton = document.createElement("button");
+    addModeButton.textContent = "Add Mode";
+    addModeButton.classList.add("num", "mode-toggle", "active-mode");
+    addModeButton.dataset.mode = "add";
+    numpad.insertBefore(addModeButton, numpad.childNodes[9]);
+
     const backButton = document.createElement("button");
     backButton.id = "backB";
     backButton.textContent = "<=";
@@ -116,6 +124,9 @@ export default class NumberPad {
     keypad.appendChild(numpad);
 
     this.keyPadElement.appendChild(this.parentContainer);
+
+    this.modeBtn = this.keyPadElement.querySelector(".mode-toggle");
+    this.modeBtn.addEventListener("click", () => this.toggleMode());
   }
 
   show() {
@@ -149,5 +160,23 @@ export default class NumberPad {
         }
       });
     }
+  }
+
+  toggleMode() {
+    this.isAddMode = !this.isAddMode;
+
+    // Update button text and style
+    if (this.isAddMode) {
+      this.modeBtn.textContent = "Add Mode";
+      this.modeBtn.classList.add("active-mode");
+    } else {
+      this.modeBtn.textContent = "Std";
+      this.modeBtn.classList.remove("active-mode");
+    }
+
+    // clear input when switching modes to prevent math erros
+    this.displayValue = "";
+    this.rawInput = "";
+    if (this.onUpdate) this.onUpdate("");
   }
 }
