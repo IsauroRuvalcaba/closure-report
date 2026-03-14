@@ -216,7 +216,7 @@ i.bi {
   /* 1. Freeze the background so only the form moves */
   html,
   body {
-    height: 100vh;
+    height: 100dvh; /* Dynamic Viewport Height */
     width: 100vw;
     overflow: hidden; /* This kills the horizontal scroll globally */
     margin: 0;
@@ -228,7 +228,7 @@ i.bi {
   .form-container {
     width: 100%;
     /* Start at full height */
-    height: 100vh;
+    height: 100dvh;
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;
@@ -240,12 +240,15 @@ i.bi {
     /* transition: height 0.3s ease; */
 
     transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Helps with 'stuttery' scrolling on iPhones */
+    -webkit-overflow-scrolling: touch;
   }
 
   /* When keypad is active, shrink the form to make room */
   body.keypad-open .form-container {
-    height: calc(100vh - 246.5px);
-    padding-bottom: 80px;
+    height: calc(100dvh - 246.5px);
+    padding-bottom: 60px;
   }
 
   /* Ensure your results bars still span the width */
@@ -276,10 +279,10 @@ i.bi {
     /* THE EXIT ANIMATION: 
        This cubic-bezier creates a "pull back" or "slight raise" 
        before it drops down. */
+    transform: translateY(100%);
     transition:
       transform 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045),
       visibility 0.4s;
-    transform: translateY(100%);
   }
 
   .keypad-container.active {
@@ -289,8 +292,8 @@ i.bi {
 
     /* THE ENTRANCE ANIMATION:
        This is your original "Bounce" timing. */
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform: translateY(0);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .input-group {
