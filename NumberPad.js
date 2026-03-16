@@ -106,6 +106,7 @@ export default class NumberPad {
     let addModeButton = document.createElement("button");
     addModeButton.textContent = "Add Mode";
     addModeButton.classList.add("num", "mode-toggle", "active-mode");
+    addModeButton.id = "modeToggle";
     addModeButton.dataset.mode = "add";
     numpad.insertBefore(addModeButton, numpad.childNodes[9]);
 
@@ -144,22 +145,67 @@ export default class NumberPad {
   setupEventListeners() {
     if (this.parentContainer) {
       this.parentContainer.addEventListener("click", (e) => {
+        if (e.target.tagName === "BUTTON" || e.target.closest("button")) {
+          this.playClickSound(); // Trigger the sound for everyone
+        }
+
         if (e.target.classList.contains("num")) {
+          this.triggerVibration(15);
           const buttonText = e.target.innerText;
           this.handleTap(buttonText);
           this.onUpdate(this.displayValue);
         }
 
         if (e.target.id === "clear") {
+          this.triggerVibration(45);
+
           this.clear();
           this.onUpdate(this.displayValue);
         }
         if (e.target.id === "backB") {
+          this.triggerVibration(25);
           this.backspace();
           this.onUpdate(this.displayValue);
         }
+
+        if (e.target.id == "modeToggle") {
+          this.triggerVibration(15);
+        }
       });
     }
+  }
+
+  triggerVibration(num) {
+    if (navigator.vibrate) {
+      navigator.vibrate(num);
+    }
+  }
+
+  playClickSound() {
+    // 1. Create the Audio Context
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    // 2. Create an Oscillator (the sound wave) and a Gain Node (the volume)
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    // 3. Set the 'Click' characteristics
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); // High pitch
+
+    // 4. Create a very fast "fade out" so it sounds like a click, not a beep
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // Start quiet
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.0001,
+      audioCtx.currentTime + 0.1,
+    );
+
+    // 5. Start and stop almost instantly
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.1);
   }
 
   toggleMode() {

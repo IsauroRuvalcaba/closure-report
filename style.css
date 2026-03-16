@@ -376,7 +376,7 @@ i.bi {
   }
   .exp-group label {
     left: 20px;
-    top: 10px;
+    top: 5px;
     padding: 0px 4px;
   }
   .exp-button {
@@ -465,6 +465,15 @@ i.bi {
 
   /* border-color: #2563eb; */
   border: none;
+}
+
+.num:active,
+#clear:active,
+#backB:active,
+.mode-toggle:active {
+  background-color: var(--primary-bckgr-blue);
+  transform: scale(0.92); /* Shrinks the button slightly when pressed */
+  transition: transform 0.05s linear; /* Makes it feel instant */
 }
 
 input,
