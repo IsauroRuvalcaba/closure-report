@@ -182,9 +182,22 @@ export default class AppInterface {
     this.totalDrawer.innerText = currencyFormatter.format(
       this.report.getActualTotal(),
     );
-    this.discrepancy.innerText = currencyFormatter.format(
-      this.report.getDiscrepancy(),
-    );
+
+    const diff = this.report.getDiscrepancy();
+    // this.discrepancy.innerText =
+    //   diff < 0 ? `-$${Math.abs(diff).toFixed(2)}` : `$${diff.toFixed(2)}`;
+
+    this.discrepancy.innerText = currencyFormatter.format(diff);
+
+    if (diff < 0) {
+      discrepancy.classList.add("text-danger");
+      discrepancy.classList.remove("text-success");
+    } else if (diff > 0) {
+      discrepancy.classList.add("text-success");
+      discrepancy.classList.remove("text-danger");
+    } else {
+      discrepancy.classList.remove("text-danger", "text-success");
+    }
 
     this.renderList(
       "oRing",

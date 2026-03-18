@@ -197,7 +197,7 @@ export default class NumberPad {
     oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); // High pitch
 
     // 4. Create a very fast "fade out" so it sounds like a click, not a beep
-    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // Start quiet
+    gainNode.gain.setValueAtTime(0.03, audioCtx.currentTime); // Start quiet
     gainNode.gain.exponentialRampToValueAtTime(
       0.0001,
       audioCtx.currentTime + 0.1,
