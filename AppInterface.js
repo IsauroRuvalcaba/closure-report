@@ -27,10 +27,15 @@ export default class AppInterface {
     this.totalCash = this.root.querySelector("#total-cash");
     this.totalDrawer = this.root.querySelector("#total-drawer");
     this.discrepancy = this.root.querySelector("#discrepancy");
+    this.calendar = document.querySelector("#calendar");
     this.setupEventListeners();
   }
 
   setupEventListeners() {
+    this.calendar.addEventListener("change", (e) => {
+      console.log(e.target.value);
+    });
+
     this.grossSales.addEventListener("input", (e) => {
       this.report.grossSales = parseFloat(e.target.value) || 0;
 
