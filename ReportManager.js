@@ -1,8 +1,7 @@
-import ClosureReport from "./ClosureReport.js";
-
 export default class ReportManager {
   constructor() {
     this.reports = [];
+    this.loadReports();
   }
 
   addDayReport(rdate, reportData) {
@@ -15,6 +14,21 @@ export default class ReportManager {
     } else {
       const newReport = { openingDate: rdate, data: reportData };
       this.reports.push(newReport);
+    }
+    this.saveToLocalStorage();
+  }
+
+  saveToLocalStorage() {
+    localStorage.setItem("closingReportsData", JSON.stringify(this.reports));
+  }
+
+  loadReports() {
+    const storedReports = localStorage.getItem("closingReportsData");
+
+    if (storedReports) {
+      const retrieveReports = JSON.parse(storedReports);
+      this.reports = [];
+      this.reports = retrieveReports;
     }
   }
 }
