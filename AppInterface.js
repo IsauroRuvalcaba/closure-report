@@ -28,6 +28,7 @@ export default class AppInterface {
     this.totalDrawer = this.root.querySelector("#total-drawer");
     this.discrepancy = this.root.querySelector("#discrepancy");
     this.calendar = document.querySelector("#calendar");
+    this.saveDiv = document.querySelector(".save");
     this.setupEventListeners();
   }
 
@@ -171,6 +172,10 @@ export default class AppInterface {
       if (!isInput && !isKeypad) {
         this.numpad.hide();
       }
+    });
+    this.saveDiv.addEventListener("click", (e) => {
+      console.log(JSON.stringify(this.report));
+      console.log(this.report);
     });
   }
 
