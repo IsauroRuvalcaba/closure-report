@@ -174,8 +174,7 @@ export default class AppInterface {
       }
     });
     this.saveDiv.addEventListener("click", (e) => {
-      console.log(JSON.stringify(this.report));
-      console.log(this.report);
+      console.log(this.report.getState());
     });
   }
 

@@ -26,4 +26,14 @@ export default class ClosureReport {
   getDiscrepancy() {
     return this.getActualTotal() - this.getExpectedTotal();
   }
+
+  getState() {
+    return {
+      grossSales: this.grossSales,
+      creditCardTotal: this.creditCardTotal,
+      actualCash: this.actualCash,
+      overRings: { entries: this.overRings.getList() },
+      expenses: { entries: this.expenses.getList() },
+    };
+  }
 }

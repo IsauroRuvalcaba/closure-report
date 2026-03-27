@@ -4,13 +4,18 @@ export default class ReportManager {
     this.loadReports();
   }
 
+  getDateReportData(rdate) {
+    return this.reports.find((rdata) => rdata.openingDate === rdate);
+  }
+
   addDayReport(rdate, reportData) {
-    const foundReport = this.reports.find(
+    const foundReportIndex = this.reports.findIndex(
       (rdata) => rdata.openingDate === rdate,
     );
 
-    if (foundReport) {
-      foundReport.data = reportData.data;
+    if (foundReportIndex !== -1) {
+      const updateReportObject = { openingDate: rdate, data: reportData };
+      this.reports[foundReportIndex] = updateReportObject;
     } else {
       const newReport = { openingDate: rdate, data: reportData };
       this.reports.push(newReport);
@@ -27,7 +32,6 @@ export default class ReportManager {
 
     if (storedReports) {
       const retrieveReports = JSON.parse(storedReports);
-      this.reports = [];
       this.reports = retrieveReports;
     }
   }
