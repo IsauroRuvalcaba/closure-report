@@ -3,8 +3,13 @@ export default class EntryList {
     this.entries = [];
   }
 
-  add(amount) {
-    this.entries.push({ id: Date.now(), amount });
+  add(amount, id = undefined) {
+    const expId = id === undefined || id === null ? Date.now() : id;
+    this.entries.push({ id: expId, amount });
+  }
+
+  resetArray() {
+    this.entries = [];
   }
 
   grandTotal() {

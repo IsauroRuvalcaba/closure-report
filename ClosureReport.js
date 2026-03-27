@@ -36,4 +36,21 @@ export default class ClosureReport {
       expenses: { entries: this.expenses.getList() },
     };
   }
+
+  loadState(data) {
+    this.overRings.resetArray();
+    this.expenses.resetArray();
+
+    this.grossSales = data.grossSales;
+    this.creditCardTotal = data.creditCardTotal;
+    this.actualCash = data.actualCash;
+
+    // optional chaining to make sure properties always exist
+    data.overRings?.entries?.forEach((entry) =>
+      this.overRings.add(entry.amount, entry.id),
+    );
+    data.expenses?.entries?.forEach((entry) =>
+      this.expenses.add(entry.amount, entry.id),
+    );
+  }
 }
