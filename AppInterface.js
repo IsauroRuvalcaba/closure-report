@@ -12,6 +12,9 @@ export default class AppInterface {
 
     this.keypad = document.querySelector(".keypad-container");
     this.numpad = new NumberPad(this.keypad, () => {});
+
+    // this.reportDate = new Date().toISOString().split("T")[0];
+    this.reportDate = this.getLocalIsoDate();
     this.numpad.render();
 
     this.grossSales = this.root.querySelector("#sales");
@@ -29,12 +32,37 @@ export default class AppInterface {
     this.discrepancy = this.root.querySelector("#discrepancy");
     this.calendar = document.querySelector("#calendar");
     this.saveDiv = document.querySelector(".save");
+    this.uIDate = document.querySelector("#uIDate");
     this.setupEventListeners();
+    this.addDateToUI();
+  }
+
+  addDateToUI() {
+    // .toISOString().split("T")[0]
+    this.uIDate.innerText = new Intl.DateTimeFormat("en-US", {
+      weekday: "short",
+      day: "2-digit",
+      month: "2-digit",
+    }).format(new Date(this.reportDate + "T00:00:00"));
+
+    // new Date().toISOString().split("T")[0];
+  }
+
+  getLocalIsoDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    // Months are 0-indexed, so add 1
+    const month = (today.getMonth() + 1).toString().padStart(2, "0");
+    const day = today.getDate().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
   }
 
   setupEventListeners() {
     this.calendar.addEventListener("change", (e) => {
+      this.reportDate = e.target.value;
       console.log(e.target.value);
+      this.addDateToUI();
     });
 
     this.grossSales.addEventListener("input", (e) => {
