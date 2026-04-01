@@ -40,7 +40,6 @@ export default class ClosureReport {
   loadState(data) {
     this.overRings.resetArray();
     this.expenses.resetArray();
-
     this.grossSales = data.grossSales;
     this.creditCardTotal = data.creditCardTotal;
     this.actualCash = data.actualCash;
@@ -52,5 +51,14 @@ export default class ClosureReport {
     data.expenses?.entries?.forEach((entry) =>
       this.expenses.add(entry.amount, entry.id),
     );
+  }
+
+  resetAll() {
+    this.grossSales = 0;
+    this.creditCardTotal = 0;
+    this.actualCash = 0;
+
+    this.overRings.resetArray();
+    this.expenses.resetArray();
   }
 }

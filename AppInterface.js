@@ -1,5 +1,6 @@
 import ClosureReport from "./ClosureReport.js";
 import NumberPad from "./NumberPad.js";
+import ReportManager from "./ReportManager.js";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 2,
@@ -9,6 +10,8 @@ export default class AppInterface {
   constructor(rootElement) {
     this.root = rootElement;
     this.report = new ClosureReport(0, 0, 0);
+
+    this.reportManager = new ReportManager();
 
     this.keypad = document.querySelector(".keypad-container");
     this.numpad = new NumberPad(this.keypad, () => {});
@@ -58,11 +61,27 @@ export default class AppInterface {
     return `${year}-${month}-${day}`;
   }
 
+  populateState() {
+    this.grossSales.value = this.report.grossSales;
+    this.creditCards.value = this.report.creditCardTotal;
+
+    this.totalCash.value = this.report.actualCash;
+  }
+
   setupEventListeners() {
     this.calendar.addEventListener("change", (e) => {
       this.reportDate = e.target.value;
-      console.log(e.target.value);
       this.addDateToUI();
+      const savedData = this.reportManager.getDateReportData(this.reportDate);
+
+      if (savedData) {
+        this.report.loadState(savedData.data);
+        this.populateState();
+      } else {
+        this.report.resetAll();
+      }
+
+      this.render();
     });
 
     this.grossSales.addEventListener("input", (e) => {
@@ -202,7 +221,8 @@ export default class AppInterface {
       }
     });
     this.saveDiv.addEventListener("click", (e) => {
-      console.log(this.report.getState());
+      const data = this.report.getState();
+      this.reportManager.addDayReport(this.reportDate, data);
     });
   }
 
