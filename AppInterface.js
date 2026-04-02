@@ -240,7 +240,10 @@ export default class AppInterface {
         );
         if (userConfirmed) {
           this.reportManager.deleteReport(this.reportDate);
+
+          this.report.resetAll();
           this.clearInputs();
+          this.render();
         } else {
           console.log("Deletion cancelled.");
           return false;
