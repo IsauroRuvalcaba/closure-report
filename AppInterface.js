@@ -35,6 +35,7 @@ export default class AppInterface {
     this.discrepancy = this.root.querySelector("#discrepancy");
     this.calendar = document.querySelector("#calendar");
     this.saveDiv = document.querySelector(".save");
+    this.delRecord = document.querySelector(".delRecord");
     this.uIDate = document.querySelector("#uIDate");
     this.setupEventListeners();
     this.addDateToUI();
@@ -61,6 +62,12 @@ export default class AppInterface {
     return `${year}-${month}-${day}`;
   }
 
+  clearInputs() {
+    this.grossSales.value = "";
+    this.creditCards.value = "";
+    this.totalCash.value = "";
+  }
+
   populateState() {
     this.grossSales.value = this.report.grossSales;
     this.creditCards.value = this.report.creditCardTotal;
@@ -70,6 +77,7 @@ export default class AppInterface {
 
   setupEventListeners() {
     this.calendar.addEventListener("change", (e) => {
+      this.clearInputs();
       this.reportDate = e.target.value;
       this.addDateToUI();
       const savedData = this.reportManager.getDateReportData(this.reportDate);
@@ -223,6 +231,21 @@ export default class AppInterface {
     this.saveDiv.addEventListener("click", (e) => {
       const data = this.report.getState();
       this.reportManager.addDayReport(this.reportDate, data);
+    });
+
+    this.delRecord.addEventListener("click", (e) => {
+      if (this.reportManager.getDateReportData(this.reportDate)) {
+        const userConfirmed = confirm(
+          "Are you sure you want to delete this report?",
+        );
+        if (userConfirmed) {
+          this.reportManager.deleteReport(this.reportDate);
+          this.clearInputs();
+        } else {
+          console.log("Deletion cancelled.");
+          return false;
+        }
+      }
     });
   }
 

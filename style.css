@@ -536,3 +536,7 @@ select,
 textarea {
   font-family: inherit;
 }
+
+.delRecord {
+  margin-right: 10px;
+}

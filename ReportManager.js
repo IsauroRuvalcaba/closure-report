@@ -35,6 +35,15 @@ export default class ReportManager {
       this.reports = retrieveReports;
     }
   }
+
+  deleteReport(rDate) {
+    if (this.getDateReportData(rDate)) {
+      this.reports = this.reports.filter(
+        (report) => report.openingDate !== rDate,
+      );
+      this.saveToLocalStorage();
+    }
+  }
 }
 
 const sampleDataV2 = [
