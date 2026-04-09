@@ -178,7 +178,8 @@ li {
   text-align: right;
 }
 
-.exp-btn {
+.exp-btn,
+.cashDep-btn {
   height: 100%;
   margin-right: 20px;
   background: transparent;
@@ -539,4 +540,19 @@ textarea {
 
 .delRecord {
   margin-right: 10px;
+}
+
+#cash-list {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+#cash-list::backdrop {
+  /* background-color: hsl(0 0% 0% / 0.5); */
+  backdrop-filter: blur(4px);
+}
+
+#total-cash > span {
+  border-top: 1px solid black;
 }

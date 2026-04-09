@@ -28,7 +28,12 @@
   </head>
   <body>
     <div class="header">
-      <div class="calendar"><input id="calendar" type="date" /></div>
+      <div>
+        <span class="calendar"><input id="calendar" type="date" /></span>
+        <span id="cashEl"
+          ><i class="bi bi-cash-coin" style="font-size: 23px; color: green"></i
+        ></span>
+      </div>
       <div>
         <h3>Closure Report</h3>
         <div id="uIDate"></div>
@@ -115,6 +120,15 @@
         <div>Discrepancy</div>
         <div id="discrepancy">$0.00</div>
       </div>
+      <dialog id="cash-list">
+        <div id="dialog-header">
+          <button id="close-modal"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <button id="delete-all-records">
+          <i class="bi bi-trash3"></i> Delete all?
+        </button>
+        <ul id="cash-records"></ul>
+      </dialog>
     </div>
     <div class="keypad-container"></div>
   </body>

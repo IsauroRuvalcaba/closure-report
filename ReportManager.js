@@ -44,6 +44,15 @@ export default class ReportManager {
       this.saveToLocalStorage();
     }
   }
+
+  getReportsArray() {
+    return this.reports;
+  }
+
+  deleteAllReports() {
+    this.reports = [];
+    this.saveToLocalStorage();
+  }
 }
 
 const sampleDataV2 = [

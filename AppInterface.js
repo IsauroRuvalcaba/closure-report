@@ -20,6 +20,8 @@ export default class AppInterface {
     this.reportDate = this.getLocalIsoDate();
     this.numpad.render();
 
+    this.totalRecordsCount = null;
+
     this.grossSales = this.root.querySelector("#sales");
     this.overRingsList = this.root.querySelector("#overring-list");
     this.inputORing = this.root.querySelector("#over-ring");
@@ -34,20 +36,40 @@ export default class AppInterface {
     this.totalDrawer = this.root.querySelector("#total-drawer");
     this.discrepancy = this.root.querySelector("#discrepancy");
     this.calendar = document.querySelector("#calendar");
+    this.cashListButton = document.querySelector("#cashEl");
+    this.recordsDialog = document.querySelector("#cash-list");
+    this.closeModal = this.recordsDialog.querySelector("#close-modal");
+    this.cashDepList = this.recordsDialog.querySelector("#cash-records");
     this.saveDiv = document.querySelector(".save");
     this.delRecord = document.querySelector(".delRecord");
+    this.delAllRecords = document.querySelector("#delete-all-records");
     this.uIDate = document.querySelector("#uIDate");
     this.setupEventListeners();
     this.addDateToUI();
   }
 
+  // addDateToUI() {
+  //   // .toISOString().split("T")[0]
+  //   this.uIDate.innerText = new Intl.DateTimeFormat("en-US", {
+  //     weekday: "short",
+  //     day: "2-digit",
+  //     month: "2-digit",
+  //   }).format(new Date(this.reportDate + "T00:00:00"));
+
+  //   // new Date().toISOString().split("T")[0];
+  // }
+
   addDateToUI() {
+    this.uIDate.innerText = this.returnDateFromatted(this.reportDate);
+  }
+
+  returnDateFromatted(dateReturned) {
     // .toISOString().split("T")[0]
-    this.uIDate.innerText = new Intl.DateTimeFormat("en-US", {
+    return new Intl.DateTimeFormat("en-US", {
       weekday: "short",
       day: "2-digit",
       month: "2-digit",
-    }).format(new Date(this.reportDate + "T00:00:00"));
+    }).format(new Date(dateReturned + "T00:00:00"));
 
     // new Date().toISOString().split("T")[0];
   }
@@ -90,6 +112,14 @@ export default class AppInterface {
       }
 
       this.render();
+    });
+
+    this.cashListButton.addEventListener("click", (e) => {
+      this.recordsDialog.showModal();
+      this.renderCashDepList();
+    });
+    this.closeModal.addEventListener("click", (e) => {
+      this.recordsDialog.close();
     });
 
     this.grossSales.addEventListener("input", (e) => {
@@ -187,6 +217,50 @@ export default class AppInterface {
         this.report.expenses.remove(id);
         e.target.closest("li").remove();
         this.render();
+      }
+      if (e.target.classList.contains("modalDelRecord-btn")) {
+        e.stopPropagation();
+        const rDate = e.target.closest("li").dataset.id;
+        console.log(rDate);
+        if (this.reportManager.getDateReportData(rDate)) {
+          const userConfirmed = confirm(
+            `Are you sure you want to delete report ${rDate}?`,
+          );
+          if (userConfirmed) {
+            this.reportManager.deleteReport(rDate);
+            e.target.closest("li").remove();
+            this.renderCashDepList();
+            this.render();
+            if (rDate === this.reportDate) {
+              this.report.resetAll();
+              this.clearInputs();
+              this.render();
+            }
+          } else {
+            console.log("Deletion cancelled.");
+            return false;
+          }
+        }
+      }
+
+      if (e.target.id === "delete-all-records") {
+        console.log(this.totalRecordsCount);
+        if (this.totalRecordsCount > 0) {
+          const userConfirmed = confirm(
+            `Are you sure you want to delete all ${this.totalRecordsCount} reports?`,
+          );
+          if (userConfirmed) {
+            this.reportManager.deleteAllReports();
+            console.log("deleted recoreds");
+            this.renderCashDepList();
+            this.clearInputs();
+            this.render();
+            this.recordsDialog.close();
+          } else {
+            console.log("Deletion cancelled.");
+            return false;
+          }
+        }
       }
     });
 
@@ -310,6 +384,61 @@ export default class AppInterface {
 
         entryEl.appendChild(li);
       });
+    }
+  }
+
+  renderCashDepList() {
+    const reportsArray = this.reportManager.getReportsArray();
+    const totalCashDep = reportsArray.reduce((acc, curr) => {
+      return acc + curr.data.actualCash;
+    }, 0);
+
+    this.totalRecordsCount = reportsArray.length;
+
+    reportsArray.sort(
+      (a, b) => new Date(a.openingDate) - new Date(b.openingDate),
+    );
+
+    this.cashDepList.replaceChildren();
+
+    if (reportsArray.length > 0) {
+      reportsArray.forEach((report) => {
+        const li = document.createElement("li");
+        li.dataset.id = report.openingDate;
+
+        const btn = document.createElement("span");
+        btn.classList.add("modalDelRecord-btn");
+        btn.innerHTML = '<i class="bi bi-trash3"></i>';
+        li.appendChild(btn);
+
+        const dateText = document.createElement("span");
+        dateText.style.display = "inline-block";
+        dateText.style.minWidth = "12ch";
+        dateText.innerText = this.returnDateFromatted(report.openingDate);
+        li.appendChild(dateText);
+
+        const liText = document.createElement("span");
+        liText.style.display = "inline-block";
+        liText.style.minWidth = "9ch";
+        liText.innerText = currencyFormatter.format(report.data.actualCash);
+        li.appendChild(liText);
+
+        this.cashDepList.appendChild(li);
+      });
+
+      const li = document.createElement("li");
+      li.id = "total-cash";
+      const totalCashText = document.createElement("span");
+      totalCashText.style.display = "inline-block";
+      totalCashText.style.minWidth = "9ch";
+      totalCashText.innerText = currencyFormatter.format(totalCashDep);
+      li.appendChild(totalCashText);
+      this.cashDepList.appendChild(li);
+    } else {
+      const li = document.createElement("li");
+      const defaultText = document.createElement("span");
+      defaultText.innerText = "No Reports Saved";
+      this.cashDepList.append(defaultText);
     }
   }
 }
