@@ -589,10 +589,27 @@ textarea {
   margin-right: 10px;
 }
 
-#cash-list {
+#cash-list-dialog {
   border: none;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  min-height: 200px;
+}
+#cash-list-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+#dialog-header {
+  width: 95%;
+}
+#close-modal {
+  float: right;
+}
+
+#cash-records > li:not(:nth-last-child(2)) {
+  margin-bottom: 5px;
 }
 
 #cash-list::backdrop {

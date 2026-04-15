@@ -37,8 +37,10 @@ export default class AppInterface {
     this.discrepancy = this.root.querySelector("#discrepancy");
     this.calendar = document.querySelector("#calendar");
     this.cashListButton = document.querySelector("#cashEl");
-    this.recordsDialog = document.querySelector("#cash-list");
+    this.recordsDialog = document.querySelector("#cash-list-dialog");
     this.closeModal = this.recordsDialog.querySelector("#close-modal");
+    this.containerDelAll =
+      this.recordsDialog.querySelector("#del-all-container");
     this.cashDepList = this.recordsDialog.querySelector("#cash-records");
     this.saveDiv = document.querySelector(".save");
     this.delRecord = document.querySelector(".delRecord");
@@ -400,6 +402,14 @@ export default class AppInterface {
     );
 
     this.cashDepList.replaceChildren();
+    this.containerDelAll.replaceChildren();
+
+    if (reportsArray.length > 1) {
+      const delBtn = document.createElement("button");
+      delBtn.id = "delete-all-records";
+      delBtn.innerHTML = '<i class="bi bi-trash3"></i> Delete all?';
+      this.containerDelAll.append(delBtn);
+    }
 
     if (reportsArray.length > 0) {
       reportsArray.forEach((report) => {
