@@ -46,6 +46,7 @@ export default class AppInterface {
     this.delRecord = document.querySelector(".delRecord");
     this.delAllRecords = document.querySelector("#delete-all-records");
     this.uIDate = document.querySelector("#uIDate");
+    this.notSavedRpt = document.querySelector("#rptStatus");
     this.setupEventListeners();
     this.addDateToUI();
   }
@@ -62,10 +63,19 @@ export default class AppInterface {
   // }
 
   addDateToUI() {
-    this.uIDate.innerText = this.returnDateFromatted(this.reportDate);
+    this.uIDate.innerText = this.returnDateFormatted(this.reportDate);
+
+    const savedData = this.reportManager.getDateReportData(this.reportDate);
+
+    // loads data when app opens up for current date
+    if (savedData) {
+      this.report.loadState(savedData.data);
+      this.populateState();
+      this.render();
+    }
   }
 
-  returnDateFromatted(dateReturned) {
+  returnDateFormatted(dateReturned) {
     // .toISOString().split("T")[0]
     return new Intl.DateTimeFormat("en-US", {
       weekday: "short",
@@ -307,6 +317,7 @@ export default class AppInterface {
     this.saveDiv.addEventListener("click", (e) => {
       const data = this.report.getState();
       this.reportManager.addDayReport(this.reportDate, data);
+      this.render();
     });
 
     this.delRecord.addEventListener("click", (e) => {
@@ -364,6 +375,15 @@ export default class AppInterface {
       this.report.overRings.getList(),
     );
     this.renderList("exp", this.expenseList, this.report.expenses.getList());
+    const currSavedRpt = this.reportManager.getDateReportData(
+      this.reportDate,
+    )?.data;
+
+    this.notSavedRpt.innerText = "";
+    let isSaved = this.areDeeplyEqual(currSavedRpt, this.report.getState());
+    if (!isSaved) {
+      this.notSavedRpt.innerText = "Not Saved";
+    }
   }
 
   renderList(listType, entryEl, entryList) {
@@ -424,7 +444,7 @@ export default class AppInterface {
         const dateText = document.createElement("span");
         dateText.style.display = "inline-block";
         dateText.style.minWidth = "12ch";
-        dateText.innerText = this.returnDateFromatted(report.openingDate);
+        dateText.innerText = this.returnDateFormatted(report.openingDate);
         li.appendChild(dateText);
 
         const liText = document.createElement("span");
@@ -450,5 +470,47 @@ export default class AppInterface {
       defaultText.innerText = "No Reports Saved";
       this.cashDepList.append(defaultText);
     }
+  }
+
+  areDeeplyEqual(obj1, obj2) {
+    if (obj1 === obj2) return true;
+
+    if (Array.isArray(obj1) && Array.isArray(obj2)) {
+      if (obj1.length !== obj2.length) return false;
+
+      return obj1.every((elem, index) => {
+        return this.areDeeplyEqual(elem, obj2[index]);
+      });
+    }
+
+    if (
+      typeof obj1 === "object" &&
+      typeof obj2 === "object" &&
+      obj1 !== null &&
+      obj2 !== null
+    ) {
+      if (Array.isArray(obj1) || Array.isArray(obj2)) return false;
+
+      const keys1 = Object.keys(obj1);
+      const keys2 = Object.keys(obj2);
+
+      if (
+        keys1.length !== keys2.length ||
+        !keys1.every((key) => keys2.includes(key))
+      )
+        return false;
+
+      for (let key in obj1) {
+        let isEqual = this.areDeeplyEqual(obj1[key], obj2[key]);
+        if (!isEqual) {
+          console.log(obj1[key], obj2[key]);
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
   }
 }

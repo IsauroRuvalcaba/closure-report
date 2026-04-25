@@ -260,7 +260,7 @@ i.bi {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 20px 20px 40px 20px;
+    padding: 0px 20px 40px 20px;
     /* Smoothly adjust height when keypad pops up */
     /* transition: height 0.3s ease; */
 
