@@ -49,6 +49,8 @@ export default class AppInterface {
     this.notSavedRpt = document.querySelector("#rptStatus");
     this.setupEventListeners();
     this.addDateToUI();
+
+    this.isDirty = false;
   }
 
   // addDateToUI() {
@@ -137,6 +139,8 @@ export default class AppInterface {
     this.grossSales.addEventListener("input", (e) => {
       this.report.grossSales = parseFloat(e.target.value) || 0;
 
+      this.isDirty = true;
+
       this.render();
     });
     this.grossSales.addEventListener("focus", () => {
@@ -156,6 +160,7 @@ export default class AppInterface {
     this.totalCash.addEventListener("input", (e) => {
       this.report.actualCash = parseFloat(e.target.value) || 0;
 
+      this.isDirty = true;
       this.render();
     });
     this.totalCash.addEventListener("focus", () => {
@@ -174,6 +179,7 @@ export default class AppInterface {
     this.creditCards.addEventListener("input", (e) => {
       this.report.creditCardTotal = parseFloat(e.target.value) || 0;
 
+      this.isDirty = true;
       this.render();
     });
     this.creditCards.addEventListener("focus", () => {
@@ -220,6 +226,8 @@ export default class AppInterface {
 
         this.report.overRings.remove(id);
         e.target.closest("li").remove();
+
+        this.isDirty = true;
         this.render();
       }
       if (e.target.classList.contains("exp-del-btn")) {
@@ -228,6 +236,8 @@ export default class AppInterface {
 
         this.report.expenses.remove(id);
         e.target.closest("li").remove();
+
+        this.isDirty = true;
         this.render();
       }
       if (e.target.classList.contains("modalDelRecord-btn")) {
@@ -283,6 +293,7 @@ export default class AppInterface {
       if (overRingNum > 0 && !Number.isNaN(overRingNum)) {
         this.report.overRings.add(overRingNum);
         this.inputORing.value = "";
+        this.isDirty = true;
         this.render();
       } else {
         alert("Please enter a number greater than zero");
@@ -296,6 +307,7 @@ export default class AppInterface {
       if (expenseValue > 0 && !Number.isNaN(expenseValue)) {
         this.report.expenses.add(expenseValue);
         this.inputExpense.value = "";
+        this.isDirty = true;
         this.render();
       } else {
         alert("Please enter a number greater than zero");
@@ -317,6 +329,8 @@ export default class AppInterface {
     this.saveDiv.addEventListener("click", (e) => {
       const data = this.report.getState();
       this.reportManager.addDayReport(this.reportDate, data);
+
+      this.isDirty = false;
       this.render();
     });
 
@@ -379,11 +393,12 @@ export default class AppInterface {
       this.reportDate,
     )?.data;
 
-    this.notSavedRpt.innerText = "";
-    let isSaved = this.areDeeplyEqual(currSavedRpt, this.report.getState());
-    if (!isSaved) {
-      this.notSavedRpt.innerText = "Not Saved";
-    }
+    // this.notSavedRpt.innerText = "";
+    // let isSaved = this.areDeeplyEqual(currSavedRpt, this.report.getState());
+    // if (!isSaved) {
+    //   this.notSavedRpt.innerText = "Not Saved";
+    // }
+    this.notSavedRpt.innerText = this.isDirty ? "Not Saved" : "";
   }
 
   renderList(listType, entryEl, entryList) {
