@@ -49,6 +49,10 @@ export default class ReportManager {
     return this.reports;
   }
 
+  getCount() {
+    return this.reports.length;
+  }
+
   deleteAllReports() {
     this.reports = [];
     this.saveToLocalStorage();

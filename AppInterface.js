@@ -20,7 +20,7 @@ export default class AppInterface {
     this.reportDate = this.getLocalIsoDate();
     this.numpad.render();
 
-    this.totalRecordsCount = null;
+    this.totalRecordsCount = this.reportManager.getCount();
 
     this.grossSales = this.root.querySelector("#sales");
     this.overRingsList = this.root.querySelector("#overring-list");
@@ -415,7 +415,7 @@ export default class AppInterface {
       return acc + curr.data.actualCash;
     }, 0);
 
-    this.totalRecordsCount = reportsArray.length;
+    // this.totalRecordsCount = reportsArray.length;
 
     reportsArray.sort(
       (a, b) => new Date(a.openingDate) - new Date(b.openingDate),
