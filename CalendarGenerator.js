@@ -12,6 +12,7 @@ export default class CaledarGenerator {
 
   logGrid() {
     console.log(this.calGrid);
+    return this.calGrid;
   }
 
   getDateInfo(dateVal, direction) {

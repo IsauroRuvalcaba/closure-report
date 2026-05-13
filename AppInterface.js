@@ -1,3 +1,4 @@
+import CaledarGenerator from "./CalendarGenerator.js";
 import ClosureReport from "./ClosureReport.js";
 import NumberPad from "./NumberPad.js";
 import ReportManager from "./ReportManager.js";
@@ -47,10 +48,14 @@ export default class AppInterface {
     this.delAllRecords = document.querySelector("#delete-all-records");
     this.uIDate = document.querySelector("#uIDate");
     this.notSavedRpt = document.querySelector("#rptStatus");
+    this.calendarContainer = document.querySelector("#calendar-container");
+    this.dayGrid = document.querySelector("#day-grid");
+    this.calGenerator = new CaledarGenerator(2026, 4);
     this.setupEventListeners();
     this.addDateToUI();
 
     this.isDirty = false;
+    this.renderCal();
   }
 
   // addDateToUI() {
@@ -286,6 +291,16 @@ export default class AppInterface {
       }
     });
 
+    this.dayGrid.addEventListener("click", (e) => {
+      if (e.target.classList.contains("day-cell")) {
+        const recordId = e.target.dataset.date;
+        const reportRecord = this.reportManager.getDateReportData(recordId);
+        if (reportRecord) {
+          console.log(reportRecord);
+        }
+      }
+    });
+
     this.btnAddOverring.addEventListener("click", (e) => {
       // let overRing = prompt("Add overring amount");
       let overRing = this.inputORing.value;
@@ -485,6 +500,40 @@ export default class AppInterface {
       defaultText.innerText = "No Reports Saved";
       this.cashDepList.append(defaultText);
     }
+  }
+
+  renderCal() {
+    // const liText = document.createElement("span");
+    // liText.style.display = "inline-block";
+    // liText.style.minWidth = "9ch";
+    // liText.innerText = currencyFormatter.format(report.data.actualCash);
+    // li.appendChild(liText);
+
+    // this.cashDepList.appendChild(li);
+
+    const calGen = this.calGenerator.logGrid();
+    this.dayGrid.replaceChildren();
+
+    calGen.forEach((day) => {
+      const divD = document.createElement("div");
+      divD.dataset.date = day.fullDateString;
+      divD.classList.add("day-cell");
+      divD.innerText = day.dayNumber;
+      const dotSpan = document.createElement("span");
+      dotSpan.classList.add("dot");
+      divD.appendChild(dotSpan);
+      const exists = this.reportManager.getDateReportData(day.fullDateString);
+      // console.log(day.fullDateString);
+      if (exists) {
+        divD.classList.add("has-data");
+        dotSpan.classList.add("show-dot");
+      }
+      if (day.isCurrentMonth) {
+        divD.classList.add("curr-Month");
+      }
+
+      this.dayGrid.appendChild(divD);
+    });
   }
 
   areDeeplyEqual(obj1, obj2) {
