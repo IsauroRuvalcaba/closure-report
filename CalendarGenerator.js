@@ -2,17 +2,38 @@ export default class CaledarGenerator {
   constructor(year, month) {
     this.year = year;
     this.month = month;
-    this.currMDate = new Date(this.year, this.month - 1, 1);
-    this.startCol = this.currMDate.getDay();
-    this.monthLength = new Date(this.year, this.month, 0).getDate();
-    this.prevMDate = new Date(this.year, this.month - 1, 0).getDate();
+
+    this.updateDate();
+
     this.calGrid = new Array(6 * 7).fill(null);
     this.calSetup();
   }
 
   logGrid() {
-    console.log(this.calGrid);
     return this.calGrid;
+  }
+  updateDate() {
+    this.currMDate = new Date(this.year, this.month - 1, 1);
+    this.startCol = this.currMDate.getDay();
+    this.monthLength = new Date(this.year, this.month, 0).getDate();
+    this.prevMDate = new Date(this.year, this.month - 1, 0).getDate();
+  }
+
+  changeMonth(direction) {
+    if (direction === "prev") {
+      this.month === 1
+        ? ((this.year -= 1), (this.month = 12))
+        : (this.month -= 1);
+    } else if (direction === "post") {
+      this.month === 12
+        ? ((this.year += 1), (this.month = 1))
+        : (this.month += 1);
+    } else {
+      return null;
+    }
+    this.updateDate();
+    this.calSetup();
+    this.logGrid();
   }
 
   getDateInfo(dateVal, direction) {
@@ -38,7 +59,6 @@ export default class CaledarGenerator {
   calSetup() {
     let preMDayStart = this.prevMDate - (this.startCol - 1);
     const totPreCurDays = this.startCol + this.monthLength;
-
     const prevMoYear = this.getDateInfo("year", "prev");
     const prevMoMo = this.getDateInfo("month", "prev");
     const nextMoYear = this.getDateInfo("year", "post");

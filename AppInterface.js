@@ -17,9 +17,10 @@ export default class AppInterface {
     this.keypad = document.querySelector(".keypad-container");
     this.numpad = new NumberPad(this.keypad, () => {});
 
-    // this.reportDate = new Date().toISOString().split("T")[0];
     this.reportDate = this.getLocalIsoDate();
     this.numpad.render();
+    this.year = null;
+    this.month = null;
 
     this.totalRecordsCount = this.reportManager.getCount();
 
@@ -36,7 +37,7 @@ export default class AppInterface {
     this.totalCash = this.root.querySelector("#total-cash");
     this.totalDrawer = this.root.querySelector("#total-drawer");
     this.discrepancy = this.root.querySelector("#discrepancy");
-    this.calendar = document.querySelector("#calendar");
+    this.calendarBtn = document.querySelector(".cal-button");
     this.cashListButton = document.querySelector("#cashEl");
     this.recordsDialog = document.querySelector("#cash-list-dialog");
     this.closeModal = this.recordsDialog.querySelector("#close-modal");
@@ -48,26 +49,22 @@ export default class AppInterface {
     this.delAllRecords = document.querySelector("#delete-all-records");
     this.uIDate = document.querySelector("#uIDate");
     this.notSavedRpt = document.querySelector("#rptStatus");
+    this.calendarBackDrop = document.querySelector("#calendar-backdrop");
     this.calendarContainer = document.querySelector("#calendar-container");
     this.dayGrid = document.querySelector("#day-grid");
-    this.calGenerator = new CaledarGenerator(2026, 4);
+    this.calDate = document.querySelector("#cal-date");
+    this.calGenerator = new CaledarGenerator(
+      this.getDatePart("year"),
+      this.getDatePart("month"),
+    );
+    this.preMo = document.querySelector("#pre-month");
+    this.postMo = document.querySelector("#post-month");
     this.setupEventListeners();
     this.addDateToUI();
 
     this.isDirty = false;
     this.renderCal();
   }
-
-  // addDateToUI() {
-  //   // .toISOString().split("T")[0]
-  //   this.uIDate.innerText = new Intl.DateTimeFormat("en-US", {
-  //     weekday: "short",
-  //     day: "2-digit",
-  //     month: "2-digit",
-  //   }).format(new Date(this.reportDate + "T00:00:00"));
-
-  //   // new Date().toISOString().split("T")[0];
-  // }
 
   addDateToUI() {
     this.uIDate.innerText = this.returnDateFormatted(this.reportDate);
@@ -91,6 +88,14 @@ export default class AppInterface {
     }).format(new Date(dateReturned + "T00:00:00"));
 
     // new Date().toISOString().split("T")[0];
+  }
+
+  getDatePart(part) {
+    const today = new Date();
+    if (part === "year") return today.getFullYear();
+
+    // Months are 0-indexed, so add 1
+    if (part === "month") return today.getMonth() + 1;
   }
 
   getLocalIsoDate() {
@@ -117,20 +122,13 @@ export default class AppInterface {
   }
 
   setupEventListeners() {
-    this.calendar.addEventListener("change", (e) => {
-      this.clearInputs();
-      this.reportDate = e.target.value;
-      this.addDateToUI();
-      const savedData = this.reportManager.getDateReportData(this.reportDate);
-
-      if (savedData) {
-        this.report.loadState(savedData.data);
-        this.populateState();
-      } else {
-        this.report.resetAll();
-      }
-
-      this.render();
+    this.calendarBtn.addEventListener("click", (e) => {
+      this.calendarBackDrop.classList.add("is-visible");
+      this.calendarContainer.classList.add("is-visible");
+    });
+    this.calendarBackDrop.addEventListener("click", (e) => {
+      this.calendarBackDrop.classList.remove("is-visible");
+      this.calendarContainer.classList.remove("is-visible");
     });
 
     this.cashListButton.addEventListener("click", (e) => {
@@ -293,12 +291,31 @@ export default class AppInterface {
 
     this.dayGrid.addEventListener("click", (e) => {
       if (e.target.classList.contains("day-cell")) {
+        this.clearInputs();
         const recordId = e.target.dataset.date;
+        this.reportDate = recordId;
+        this.addDateToUI();
         const reportRecord = this.reportManager.getDateReportData(recordId);
         if (reportRecord) {
-          console.log(reportRecord);
+          this.report.loadState(reportRecord.data);
+          this.populateState();
+        } else {
+          this.report.resetAll();
         }
+        this.calendarBackDrop.classList.remove("is-visible");
+        this.calendarContainer.classList.remove("is-visible");
+        this.render();
       }
+    });
+
+    this.preMo.addEventListener("click", (e) => {
+      this.calGenerator.changeMonth("prev");
+      this.renderCal();
+    });
+
+    this.postMo.addEventListener("click", (e) => {
+      this.calGenerator.changeMonth("post");
+      this.renderCal();
     });
 
     this.btnAddOverring.addEventListener("click", (e) => {
@@ -346,6 +363,7 @@ export default class AppInterface {
       this.reportManager.addDayReport(this.reportDate, data);
 
       this.isDirty = false;
+      this.renderCal();
       this.render();
     });
 
@@ -408,11 +426,6 @@ export default class AppInterface {
       this.reportDate,
     )?.data;
 
-    // this.notSavedRpt.innerText = "";
-    // let isSaved = this.areDeeplyEqual(currSavedRpt, this.report.getState());
-    // if (!isSaved) {
-    //   this.notSavedRpt.innerText = "Not Saved";
-    // }
     this.notSavedRpt.innerText = this.isDirty ? "Not Saved" : "";
   }
 
@@ -444,8 +457,6 @@ export default class AppInterface {
     const totalCashDep = reportsArray.reduce((acc, curr) => {
       return acc + curr.data.actualCash;
     }, 0);
-
-    // this.totalRecordsCount = reportsArray.length;
 
     reportsArray.sort(
       (a, b) => new Date(a.openingDate) - new Date(b.openingDate),
@@ -503,13 +514,10 @@ export default class AppInterface {
   }
 
   renderCal() {
-    // const liText = document.createElement("span");
-    // liText.style.display = "inline-block";
-    // liText.style.minWidth = "9ch";
-    // liText.innerText = currencyFormatter.format(report.data.actualCash);
-    // li.appendChild(liText);
-
-    // this.cashDepList.appendChild(li);
+    this.calDate.innerText = this.calGenerator.currMDate.toLocaleString(
+      "default",
+      { month: "long", year: "numeric" },
+    );
 
     const calGen = this.calGenerator.logGrid();
     this.dayGrid.replaceChildren();
@@ -523,7 +531,6 @@ export default class AppInterface {
       dotSpan.classList.add("dot");
       divD.appendChild(dotSpan);
       const exists = this.reportManager.getDateReportData(day.fullDateString);
-      // console.log(day.fullDateString);
       if (exists) {
         divD.classList.add("has-data");
         dotSpan.classList.add("show-dot");

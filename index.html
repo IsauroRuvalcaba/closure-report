@@ -17,10 +17,6 @@
       rel="stylesheet"
     />
 
-    <!-- <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-    /> -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
@@ -33,7 +29,7 @@
           <span class="cal-button">
             <i class="bi bi-calendar3" style="font-size: 23px; color: gray"></i>
           </span>
-          <input id="calendar" type="date" />
+          <!-- <input id="calendar" type="date" /> -->
         </span>
         <span id="cashEl"
           ><i class="bi bi-cash-coin" style="font-size: 23px; color: green"></i
@@ -45,7 +41,6 @@
         <div id="rptStatus" style="color: red"></div>
       </div>
       <div class="del-save">
-        <!-- <span class="save">💾</span> -->
         <span class="save"
           ><i class="bi bi-floppy" style="font-size: 20px; color: blue"></i
         ></span>
@@ -141,8 +136,23 @@
       </dialog>
     </div>
     <div class="keypad-container"></div>
+    <div id="calendar-backdrop"></div>
     <div id="calendar-container">
-      <div id="dateSwitch"></div>
+      <div id="dateSwitch">
+        <span id="pre-month"
+          ><i
+            class="bi bi-chevron-left"
+            style="font-size: 23px; color: black"
+          ></i
+        ></span>
+        <span id="cal-date"></span>
+        <span id="post-month">
+          <i
+            class="bi bi-chevron-right"
+            style="font-size: 23px; color: black"
+          ></i>
+        </span>
+      </div>
       <div id="day-grid"></div>
     </div>
   </body>
