@@ -711,6 +711,11 @@ textarea {
   }
 }
 
+.curr-Month {
+  color: rgba(171, 179, 176, 0.834);
+  background-color: rgba(73, 75, 74, 0.7);
+}
+
 .dot {
   position: absolute;
   top: 6px;
