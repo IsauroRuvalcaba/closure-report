@@ -260,20 +260,30 @@ i.bi {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 0px 20px 40px 20px;
+    /* padding: 0px 20px 40px 20px; */
+
     /* Smoothly adjust height when keypad pops up */
     /* transition: height 0.3s ease; */
 
-    transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Crucial Change: Base padding covers space for the header */
+    padding: 10px 20px 40px 20px;
+
+    /* transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); */
 
     /* Helps with 'stuttery' scrolling on iPhones */
+    /* -webkit-overflow-scrolling: touch; */
+
+    /* Smooth transitions for padding changes instead of height jumps */
+    transition: padding-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-overflow-scrolling: touch;
   }
 
   /* When keypad is active, shrink the form to make room */
   body.keypad-open .form-container {
-    height: calc(100dvh - 246.5px);
-    padding-bottom: 60px;
+    /* height: calc(100dvh - 246.5px); */
+    /* padding-bottom: 60px; */
+
+    padding-bottom: 306.5px; /* 246.5px keypad + 60px comfort spacer */
   }
 
   /* Ensure your results bars still span the width */
