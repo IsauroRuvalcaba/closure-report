@@ -246,17 +246,32 @@ i.bi {
     overflow: hidden; /* This kills the horizontal scroll globally */
     margin: 0;
     padding: 0;
-    display: block;
+    /* display: block; */
     background-color: #f1f5f9; /* Your background color */
+  }
+
+  body {
+    display: flex;
+    flex-direction: column; /* Stack header on top of form */
+  }
+
+  /* 2. Protect the header from squeezing */
+  .header {
+    flex-shrink: 0;
   }
 
   .form-container {
     width: 100%;
     /* Start at full height */
-    height: 100dvh;
+    /* height: 100dvh; */
+
+    flex-grow: 1; /* Fill the remaining space perfectly */
+    min-height: 0; /* CRITICAL: Allows the container to collapse and scroll internally */
+
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;
+
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -283,7 +298,8 @@ i.bi {
     /* height: calc(100dvh - 246.5px); */
     /* padding-bottom: 60px; */
 
-    padding-bottom: 306.5px; /* 246.5px keypad + 60px comfort spacer */
+    /* padding-bottom: 306.5px; 246.5px keypad + 60px comfort spacer */
+    padding-bottom: 290px;
   }
 
   /* Ensure your results bars still span the width */
